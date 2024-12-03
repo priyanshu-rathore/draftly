@@ -9,8 +9,8 @@ import { Input } from "./ui/input";
 import { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import {auth,googleProvider} from "../firebase"
-import {createUserWithEmailAndPassword,signInWithEmailAndPassword,GoogleAuthProvider,signInWithPopup} from "firebase/auth"
+import { auth, googleProvider } from "../firebase"
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword,  signInWithPopup } from "firebase/auth"
 
 const poppins = Poppins({
   weight: ["400", "600"],
@@ -58,8 +58,8 @@ const SignUp: React.FC<SignUpProps> = ({ choose }) => {
       password: "",
       confirmPassword: "",
     },
-    validationSchema, 
-   onSubmit: async (values) => {
+    validationSchema,
+    onSubmit: async (values) => {
       try {
         await createUserWithEmailAndPassword(auth, values.email, values.password);
         alert("Signup successful!");
@@ -78,7 +78,7 @@ const SignUp: React.FC<SignUpProps> = ({ choose }) => {
       alert(`Google Sign-Up failed: ${error.message}`);
     }
   };
-  
+
 
   return (
     <div className="p-5 flex flex-col gap-3 shadow-md">
@@ -160,7 +160,7 @@ interface SignInProps {
 }
 
 const SignIn: React.FC<SignInProps> = ({ choose }) => {
-  
+
   const handleGoogleSignIn = async () => {
     try {
       const result = await signInWithPopup(auth, googleProvider);
@@ -182,9 +182,13 @@ const SignIn: React.FC<SignInProps> = ({ choose }) => {
       password: "",
     },
     validationSchema,
-    onSubmit: (values) => {
-      console.log("Sign In Values:", values);
-      alert("Signed In Successfully!");
+    onSubmit: async (values) => {
+      try {
+        await signInWithEmailAndPassword(auth, values.email, values.password);
+        alert("Login successful!");
+      } catch (error: any) {
+        alert(`Login failed: ${error.message}`);
+      }
     },
   });
 
